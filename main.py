@@ -1,7 +1,24 @@
 import cv2
+import sys
+import os
 
-filename = 'shiba_real'
-image_type = 'jpg'
+filter_type = sys.argv[1]
+
+file_path = sys.argv[2]
+
+file_metadata = os.path.splitext(file_path)
+filename = file_metadata[0]
+file_extension = file_metadata[1]
+
+try:
+    file_output_path = sys.argv[3]
+except:
+    file_output_path = f'{filename}_{filter_type}{file_extension}'
+
+print(f'filename: {filename}')
+print(f'file_extension: {file_extension}')
+print(f'file_path: {file_path}')
+print(f'file_output_path: {file_output_path}')
 
 def grayFilter(img):
     
@@ -25,12 +42,12 @@ def pencilFilter(img, scale_type='color'):
     else:
         return _gray
 
-def applyFilter(filename, image_type, filter_name='gray'):
+def applyFilter(file_path, filter_type='gray'):
     
-    img = cv2.imread(f'{filename}.{image_type}')
+    img = cv2.imread(file_path)
     
-    new_img = eval(f'{filter_name}Filter(img)')
-        
-    cv2.imwrite(f'{filename}_{filter_name}.{image_type}', new_img)
+    new_img = eval(f'{filter_type}Filter(img)')
+            
+    cv2.imwrite(file_output_path, new_img)
 
-applyFilter(filename, image_type, filter_name='pencil')
+applyFilter(file_path, filter_type)
